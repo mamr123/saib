@@ -1,16 +1,10 @@
-# Use a UBI pod that can reach the internal registry or icr.io via cluster proxy
-oc run opm-runner -n bawdev --image=registry.access.redhat.com/ubi9/ubi --restart=Never -- sleep 3600
-oc wait --for=condition=Ready pod/opm-runner -n bawdev --timeout=120s
+# Get the catalog pod name
+CAT_POD=$(oc get po -n bawdev -l olm.catalogSource=ibm-iam-operator-catalog-4-16-0 -o jsonpath='{.items[0].metadata.name}')
 
-# Copy your opm binary into the pod
-oc cp ./opm bawdev/opm-runner:/tmp/opm
-oc exec -it opm-runner -n bawdev -- chmod +x /tmp/opm
+# Copy the index DB out
+oc cp bawdev/$CAT_POD:/database/index.db ./index.db
 
-# Now run opm from inside the cluster network
-oc exec -it opm-runner -n bawdev -- /tmp/opm alpha list bundles \
-  icr.io/cpopen/ibm-iam-operator-catalog@sha256:3c6a75939ccdef91c27442564c388294e02704a7c4acf14e3146090734b026f4 \
-  > /tmp/packageList.txt
-
-# Copy the result back
-oc cp bawdev/opm-runner:/tmp/packageList.txt ./packageList.txt
-cat packageList.txt | egrep "CHANN|ibm-iam-operator" | cut -c 1-200
+# Query it locally
+sqlite3 ./index.db "SELECT name FROM package WHERE name LIKE '%iam%';"
+sqlite3 ./index.db "SELECT name, head_operatorbundle_name FROM channel WHERE package_name='ibm-iam-operator';"
+sqlite3 ./index.db "SELECT name, version, replaces FROM operatorbundle WHERE package_name='ibm-iam-operator';"
