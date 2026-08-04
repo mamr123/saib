@@ -1,6 +1,1 @@
-NAMESPACE="bawdev"  # your namespace
-
-# Delete the stale ADS secrets as instructed by IBM support
-oc delete secret -n $NAMESPACE icp4adeploy-ads-designer-internal-auth
-oc delete secret -n $NAMESPACE icp4adeploy-ads-designer-internal-database
-oc delete secret -n $NAMESPACE icp4adeploy-ads-runtime-internal-database
+oc create job -n $NAMESPACE --from=cronjob/icp4adeploy-ads-rr-registration ads-rr-registration-test-$(date +%s)
