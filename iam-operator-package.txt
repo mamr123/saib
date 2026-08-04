@@ -1,0 +1,10 @@
+{
+  "name": "ibm-iam-operator",
+  "channels": [
+    {
+      "name": "v4.16",
+      "csvName": "ibm-iam-operator.v4.16.0"
+    }
+  ],
+  "defaultChannelName": "v4.16"
+}

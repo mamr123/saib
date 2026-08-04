@@ -1,0 +1,6 @@
+{
+  "name": "ibm-commonui-operator-app"
+}
+{
+  "name": "ibm-iam-operator"
+}
