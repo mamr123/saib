@@ -1,22 +1,6 @@
-# List ALL packages in the catalog (proves the catalog is serving content)
-./grpcurl -plaintext localhost:50051 api.Registry/ListPackages > packageList.txt
+NAMESPACE="bawdev"  # your namespace
 
-# One-liner: loop through all packages and get their bundles
-for pkg in $(./grpcurl -plaintext localhost:50051 api.Registry/ListPackages | grep '"name"' | cut -d'"' -f4); do
-  echo "=== PACKAGE: $pkg ===" >> allBundles.txt
-  ./grpcurl -plaintext -d "{\"pkgName\":\"$pkg\"}" localhost:50051 api.Registry/ListBundles >> allBundles.txt 2>/dev/null
-done
-
-
-# Get the package definition (shows channels, default channel, etc.)
-./grpcurl -plaintext -d '{"name":"ibm-iam-operator"}' localhost:50051 api.Registry/GetPackage > iam-operator-package.txt
-
-# Get ALL bundles for the operator (shows every version/channel entry)
-./grpcurl -plaintext -d '{"pkgName":"ibm-iam-operator"}' localhost:50051 api.Registry/ListBundles > iam-operator-bundles.txt
-
-
-
-
-grep -i -E "channel|ibm-iam-operator" packageList.txt | head -100
-  "name": "ibm-iam-operator"
-
+# Delete the stale ADS secrets as instructed by IBM support
+oc delete secret -n $NAMESPACE icp4adeploy-ads-designer-internal-auth
+oc delete secret -n $NAMESPACE icp4adeploy-ads-designer-internal-database
+oc delete secret -n $NAMESPACE icp4adeploy-ads-runtime-internal-database
