@@ -13,3 +13,9 @@ done
 
 # Get ALL bundles for the operator (shows every version/channel entry)
 ./grpcurl -plaintext -d '{"pkgName":"ibm-iam-operator"}' localhost:50051 api.Registry/ListBundles > iam-operator-bundles.txt
+
+
+552bipe-byt@sitlxdvcpap218 ~]$ # Get ALL bundles for the operator (shows every version/channel entry)
+./grpcurl -plaintext -d '{"pkgName":"ibm-iam-operator"}' localhost:50051 api.Registry/ListBundles > iam-operator-bundles.txt
+Error invoking method "api.Registry/ListBundles": error getting request data: message type api.ListBundlesRequest has no known field named pkgName
+[g552bipe-byt@sitlxdvcpap218 ~]$
