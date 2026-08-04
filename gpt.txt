@@ -17,5 +17,6 @@ done
 
 
 
-# Step 2: Search for channels and your operator (equivalent to egrep "CHANN|ibm-iam-operator")
 grep -i -E "channel|ibm-iam-operator" packageList.txt | head -100
+  "name": "ibm-iam-operator"
+
