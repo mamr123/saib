@@ -17,20 +17,5 @@ done
 
 
 
-
-[g552bipe-byt@sitlxdvcpap218 ~]$ ./grpcurl -plaintext localhost:50051 describe api.Registry.ListBundles
-api.Registry.ListBundles is a method:
-rpc ListBundles ( .api.ListBundlesRequest ) returns ( stream .api.Bundle );
-[g552bipe-byt@sitlxdvcpap218 ~]$ ./grpcurl -plaintext -d '{"packageName":"ibm-iam-operator"}' localhost:50051 api.Registry/ListBundles
-Error invoking method "api.Registry/ListBundles": error getting request data: message type api.ListBundlesRequest has no known field named packageName
-[g552bipe-byt@sitlxdvcpap218 ~]$ ./grpcurl -plaintext -d '{"csvName":"ibm-iam-operator"}' localhost:50051 api.Registry/ListBundles
-Error invoking method "api.Registry/ListBundles": error getting request data: message type api.ListBundlesRequest has no known field named csvName
-[g552bipe-byt@sitlxdvcpap218 ~]$ ./grpcurl -plaintext -d '{"name":"ibm-iam-operator"}' localhost:50051 api.Registry/ListBundles
-Error invoking method "api.Registry/ListBundles": error getting request data: message type api.ListBundlesRequest has no known field named name
-[g552bipe-byt@sitlxdvcpap218 ~]$ ./grpcurl -plaintext localhost:50051 describe api.ListBundlesRequest
-api.ListBundlesRequest is a message:
-message ListBundlesRequest {
-}
-[g552bipe-byt@sitlxdvcpap218 ~]$ ^C
-[g552bipe-byt@sitlxdvcpap218 ~]$
-
+# Step 2: Search for channels and your operator (equivalent to egrep "CHANN|ibm-iam-operator")
+grep -i -E "channel|ibm-iam-operator" packageList.txt | head -100
