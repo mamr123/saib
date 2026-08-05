@@ -1,1 +1,68 @@
-oc create job -n $NAMESPACE --from=cronjob/icp4adeploy-ads-rr-registration ads-rr-registration-test-$(date +%s)
+[g552bipe-byt@sitlxutcpap217 ~]$ oc get packagemanifest ibm-iam-operator
+NAME               CATALOG                    AGE
+ibm-iam-operator   IBM IAM Operator Catalog   22d
+[g552bipe-byt@sitlxutcpap217 ~]$ oc get installplan
+NAME            CSV                                           APPROVAL    APPROVED
+install-b8n2s   ibm-zen-operator.v6.4.5                       Automatic   true
+install-gjhsl   operand-deployment-lifecycle-manager.v4.5.6   Automatic   true
+install-pr7wg   ibm-opencontent-flink.v2.0.16                 Automatic   true
+install-t9t7z   ibm-common-service-operator.v4.17.0           Automatic   true
+install-zsj7h   ibm-events-operator.v5.2.1                    Automatic   true
+[g552bipe-byt@sitlxutcpap217 ~]$ oc get sub
+NAME                                                                      PACKAGE                        SOURCE                               CHANNEL
+cloud-native-postgresql                                                   cloud-native-postgresql        cloud-native-postgresql-catalog      stable-v1.25
+ibm-ads-operator-v25.0-ibm-cp4a-operator-catalog-bawuat                   ibm-ads-operator               ibm-cp4a-operator-catalog            v25.0
+ibm-bts-operator                                                          ibm-bts-operator               ibm-bts-operator-catalog-v3-35       v3.35
+ibm-common-service-operator-v4.14-ibm-cs-install-catalog-v4-14-0-bawuat   ibm-common-service-operator    ibm-cs-install-catalog-v4-18-0       v4.18
+ibm-commonui-operator-app                                                 ibm-commonui-operator-app      ibm-iam-operator-catalog-4-17-0      v4.14
+ibm-content-operator-v25.0-ibm-cp4a-operator-catalog-bawuat               ibm-content-operator           ibm-cp4a-operator-catalog            v25.0
+ibm-cp4a-operator                                                         ibm-cp4a-operator              ibm-cp4a-operator-catalog            v25.0
+ibm-cp4a-wfps-operator-v25.0-ibm-cp4a-operator-catalog-bawuat             ibm-cp4a-wfps-operator         ibm-cp4a-operator-catalog            v25.0
+ibm-dpe-operator-v25.0-ibm-cp4a-operator-catalog-bawuat                   ibm-dpe-operator               ibm-cp4a-operator-catalog            v25.0
+ibm-events-operator                                                       ibm-events-operator            ibm-events-operator-catalog-v5-2-1   v5.2
+ibm-iam-operator                                                          ibm-iam-operator               ibm-iam-operator-catalog-4-17-0      v4.17
+ibm-insights-engine-operator-v25.0-ibm-cp4a-operator-catalog-bawuat       ibm-insights-engine-operator   ibm-cp4a-operator-catalog            v25.0
+ibm-odm-operator-v25.0-ibm-cp4a-operator-catalog-bawuat                   ibm-odm-operator               ibm-cp4a-operator-catalog            v25.0
+ibm-opencontent-flink                                                     ibm-opencontent-flink          ibm-opencontent-flink                v2.0
+ibm-opensearch-operator                                                   ibm-opensearch-operator        ibm-opensearch-operator-catalog      v1.1
+ibm-pfs-operator-v25.0-ibm-cp4a-operator-catalog-bawuat                   ibm-pfs-operator               ibm-cp4a-operator-catalog            v25.0
+ibm-workflow-operator-v25.0-ibm-cp4a-operator-catalog-bawuat              ibm-workflow-operator          ibm-cp4a-operator-catalog            v25.0
+ibm-zen-operator                                                          ibm-zen-operator               ibm-zen-operator-catalog-6-4-0       v6.4
+icp4a-foundation-operator-v25.0-ibm-cp4a-operator-catalog-bawuat          icp4a-foundation-operator      ibm-cp4a-operator-catalog            v25.0
+operand-deployment-lifecycle-manager-app                                  ibm-odlm                       ibm-cs-install-catalog-v4-18-0       v4.5
+[g552bipe-byt@sitlxutcpap217 ~]$ oc get csv
+NAME                                          DISPLAY                                                            VERSION   REPLACES                                      PHASE
+cloud-native-postgresql.v1.25.6               EDB Postgres for Kubernetes                                        1.25.6    cloud-native-postgresql.v1.25.5               Succeeded
+cluster-logging.v6.4.4                        Red Hat OpenShift Logging                                          6.4.4     cluster-logging.v6.4.2                        Succeeded
+cluster-observability-operator.v1.5.1         Cluster Observability Operator                                     1.5.1     cluster-observability-operator.v1.5.0         Succeeded
+ibm-ads-operator.v25.0.5                      IBM CP4BA Automation Decision Service                              25.0.5    ibm-ads-operator.v25.0.4                      Succeeded
+ibm-bts-operator.v3.35.10                     IBM Business Teams Service                                         3.35.10   ibm-bts-operator.v3.35.8                      Succeeded
+ibm-cert-manager-operator.v4.2.21             IBM Cert Manager                                                   4.2.21    ibm-cert-manager-operator.v4.2.20             Succeeded
+ibm-common-service-operator.v4.18.1           IBM Cloud Pak foundational services                                4.18.1    ibm-common-service-operator.v4.17.0           Succeeded
+ibm-commonui-operator.v4.13.0                 Ibm Common UI                                                      4.13.0    ibm-commonui-operator.v4.10.0                 Succeeded
+ibm-content-operator.v25.0.5                  IBM CP4BA FileNet Content Manager                                  25.0.5    ibm-content-operator.v25.0.4                  Succeeded
+ibm-cp4a-operator.v25.0.5                     IBM Cloud Pak for Business Automation (CP4BA) multi-pattern        25.0.5    ibm-cp4a-operator.v25.0.4                     Succeeded
+ibm-cp4a-wfps-operator.v25.0.5                IBM CP4BA Workflow Process Service                                 25.0.5    ibm-cp4a-wfps-operator.v25.0.4                Succeeded
+ibm-dpe-operator.v25.0.5                      IBM Document Processing Engine                                     25.0.5    ibm-dpe-operator.v25.0.4                      Succeeded
+ibm-iam-operator.v4.16.0                      IBM IM Operator                                                    4.17.0    ibm-iam-operator.v4.13.0                      Succeeded
+ibm-insights-engine-operator.v25.0.5          IBM CP4BA Insights Engine                                          25.0.5    ibm-insights-engine-operator.v25.0.4          Succeeded
+ibm-odm-operator.v25.0.5                      IBM Operational Decision Manager                                   25.0.5    ibm-odm-operator.v25.0.4                      Succeeded
+ibm-opencontent-flink.v2.0.19                 IBM OpenContent Flink Operator                                     2.0.19    ibm-opencontent-flink.v2.0.16                 Succeeded
+ibm-opensearch-operator.v1.4.1                IBM Opensearch Operator                                            1.4.1     ibm-opensearch-operator.v1.1.4005             Succeeded
+ibm-pfs-operator.v25.0.5                      IBM CP4BA Process Federation Server                                25.0.5    ibm-pfs-operator.v25.0.4                      Succeeded
+ibm-workflow-operator.v25.0.5                 IBM Business Automation Workflow Runtime and Workstream Services   25.0.5    ibm-workflow-operator.v25.0.4                 Succeeded
+ibm-zen-operator.v6.4.5                       IBM Zen Service                                                    6.4.5     ibm-zen-operator.v6.4.0                       Succeeded
+icp4a-foundation-operator.v25.0.5             IBM CP4BA Foundation                                               25.0.5    icp4a-foundation-operator.v25.0.4             Succeeded
+loki-operator.v6.4.4                          Loki Operator                                                      6.4.4     loki-operator.v6.4.2                          Succeeded
+operand-deployment-lifecycle-manager.v4.5.6   Operand Deployment Lifecycle Manager                               4.5.6     operand-deployment-lifecycle-manager.v4.5.2   Succeeded
+[g552bipe-byt@sitlxutcpap217 ~]$ oc get catsrc
+NAME                                 DISPLAY                                 TYPE   PUBLISHER   AGE
+cloud-native-postgresql-catalog      Cloud Native Postgresql Catalog         grpc   IBM         196d
+ibm-bts-operator-catalog-v3-35       BTS Operator-3.35.10                    grpc   IBM         196d
+ibm-cp4a-operator-catalog            ibm-cp4a-operator                       grpc   IBM         196d
+ibm-cs-install-catalog-v4-18-0       IBM CS Install Operators                grpc   IBM         22d
+ibm-events-operator-catalog-v5-2-1   IBM Events Operator Catalog-v5.2.1      grpc   IBM         45h
+ibm-fncm-operator-catalog            ibm-fncm-operator                       grpc   IBM         196d
+ibm-iam-operator-catalog-4-17-0      IBM IAM Operator Catalog                grpc   IBM         22d
+ibm-opencontent-flink                IBM CS Opencontent Flink Catalog        grpc   IBM         196d
+ibm-opensearch-operator-catalog      IBM CS Opencontent Opensearch Catalog   grpc   IBM         196d
