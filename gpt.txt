@@ -1,3 +1,22 @@
+Type	Status	Updated	Reason	Message
+ResolutionFailed	True	
+-
+ConstraintsNotSatisfiable	constraints not satisfiable: no operators found from catalog ibm-zen-operator-catalog-6-4-0 in namespace bawuat referenced by subscription ibm-zen-operator, subscription ibm-zen-operator exists
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 [g552bipe-byt@sitlxutcpap217 ~]$ oc get packagemanifest ibm-iam-operator
 NAME               CATALOG                    AGE
 ibm-iam-operator   IBM IAM Operator Catalog   22d
