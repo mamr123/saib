@@ -3,7 +3,7 @@
 libertySSCookie: "None"
 
 
-
+oc patch Authentication.operator.ibm.com --type=merge -p '{"spec":{"config":{"libertySSCookie":"None"}}}'
 
 
 
