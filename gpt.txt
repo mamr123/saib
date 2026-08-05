@@ -1,9 +1,20 @@
-Type	Status	Updated	Reason	Message
-ResolutionFailed	True	
--
-ConstraintsNotSatisfiable	constraints not satisfiable: no operators found from catalog ibm-zen-operator-catalog-6-4-0 in namespace bawuat referenced by subscription ibm-zen-operator, subscription ibm-zen-operator exists
-
-
+# IBM Zen Operator Catalog 6.4.5+20260501.202141.4
+# we only update the catalog name when the channel is changed.
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: ibm-zen-operator-catalog-6-4-0
+  namespace: openshift-marketplace
+  annotations:
+    bedrock_catalogsource_priority: '1'
+spec:
+  displayName: IBM Zen Operator Catalog
+  publisher: IBM
+  sourceType: grpc
+  image: icr.io/cpopen/ibm-zen-operator-catalog@sha256:0c1fde3f2b76479bb76ce853a28a071ac4e9b51bceee1af39b581c51f8ca746c
+  priority: 100
+  grpcPodConfig:
+    securityContextConfig: restricted
 
 
 
