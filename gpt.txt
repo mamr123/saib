@@ -19,3 +19,81 @@ for POD in $(oc get pods -n "$NS" \
      grep -n -A10 -B5 "samesite-none\|header_filter_by_lua_block"'
 
 done
+
+
+
+
+
+
+
+
+[g552bipe-byt@sitlxutcpap217 ~]$ for POD in $(oc get pods -n "$NS" \
+  -l component=ibm-nginx \
+  -o jsonpath='{.items[*].metadata.name}'); do
+
+  CONTAINER=$(oc get pod "$POD" -n "$NS" \
+    -o jsonpath='{.spec.containers[0].name}')
+
+  echo "===== Pod: $POD / Container: $CONTAINER ====="
+
+  oc exec -n "$NS" "$POD" -c "$CONTAINER" -- sh -c \
+    'nginx -T 2>/dev/null |
+     grep -n -A10 -B5 "samesite-none\|header_filter_by_lua_block"'
+
+done
+===== Pod: ibm-nginx-7bbbf446fc-22fk6 / Container: ibm-nginx-container =====
+248-  keepalive 512;
+249-  keepalive_timeout 30s;
+250-  keepalive_requests 500;
+251-}
+252-
+253:# configuration file /nginx_data/extensions/upstreams/bawuat_samesite-none-extension_ie_264.conf:
+254:header_filter_by_lua_block {
+255-    local headers = ngx.header["Set-Cookie"]
+256-
+257-    if headers then
+258-        local function modify_cookie(cookie)
+259-            if cookie:match("SameSite=Strict") or cookie:match("SameSite=Lax") then
+260-                local modified = cookie:gsub("SameSite=Strict", "SameSite=None")
+261-                                      :gsub("SameSite=Lax", "SameSite=None")
+262-
+263-                if not modified:match("Secure") then
+264-                    modified = modified .. "; Secure"
+===== Pod: ibm-nginx-7bbbf446fc-lqqgj / Container: ibm-nginx-container =====
+248-  keepalive 512;
+249-  keepalive_timeout 30s;
+250-  keepalive_requests 500;
+251-}
+252-
+253:# configuration file /nginx_data/extensions/upstreams/bawuat_samesite-none-extension_ie_264.conf:
+254:header_filter_by_lua_block {
+255-    local headers = ngx.header["Set-Cookie"]
+256-
+257-    if headers then
+258-        local function modify_cookie(cookie)
+259-            if cookie:match("SameSite=Strict") or cookie:match("SameSite=Lax") then
+260-                local modified = cookie:gsub("SameSite=Strict", "SameSite=None")
+261-                                      :gsub("SameSite=Lax", "SameSite=None")
+262-
+263-                if not modified:match("Secure") then
+264-                    modified = modified .. "; Secure"
+===== Pod: ibm-nginx-7bbbf446fc-r4j5h / Container: ibm-nginx-container =====
+248-  keepalive 512;
+249-  keepalive_timeout 30s;
+250-  keepalive_requests 500;
+251-}
+252-
+253:# configuration file /nginx_data/extensions/upstreams/bawuat_samesite-none-extension_ie_264.conf:
+254:header_filter_by_lua_block {
+255-    local headers = ngx.header["Set-Cookie"]
+256-
+257-    if headers then
+258-        local function modify_cookie(cookie)
+259-            if cookie:match("SameSite=Strict") or cookie:match("SameSite=Lax") then
+260-                local modified = cookie:gsub("SameSite=Strict", "SameSite=None")
+261-                                      :gsub("SameSite=Lax", "SameSite=None")
+262-
+263-                if not modified:match("Secure") then
+264-                    modified = modified .. "; Secure"
+[g552bipe-byt@sitlxutcpap217 ~]$
+
