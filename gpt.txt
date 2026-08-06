@@ -1,2 +1,21 @@
 oc delete zenextension samesite-none-extension -n bawuat
 oc delete pod -n bawuat -l component=ibm-nginx
+
+
+
+export NS=bawuat
+
+for POD in $(oc get pods -n "$NS" \
+  -l component=ibm-nginx \
+  -o jsonpath='{.items[*].metadata.name}'); do
+
+  CONTAINER=$(oc get pod "$POD" -n "$NS" \
+    -o jsonpath='{.spec.containers[0].name}')
+
+  echo "===== Pod: $POD / Container: $CONTAINER ====="
+
+  oc exec -n "$NS" "$POD" -c "$CONTAINER" -- sh -c \
+    'nginx -T 2>/dev/null |
+     grep -n -A10 -B5 "samesite-none\|header_filter_by_lua_block"'
+
+done
