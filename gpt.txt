@@ -1,4 +1,134 @@
-[g552bipe-byt@sitlxutcpap217 ~]$ export NS=bawuat
+export NS=bawuat
+
+cp samesite-none-extension.yaml samesite-only.backup.yaml
+
+oc get zenextension samesite-none-extension -n "$NS" \
+  -o yaml > samesite-none-extension.cluster-backup.yaml
+
+
+
+
+
+
+cat > samesite-frame-ancestors-extension.yaml <<'EOF'
+apiVersion: zen.cpd.ibm.com/v1
+kind: ZenExtension
+metadata:
+  name: samesite-none-extension
+  namespace: bawuat
+spec:
+  samesite-none.conf: |
+    header_filter_by_lua_block {
+        local headers = ngx.header["Set-Cookie"]
+
+        if headers then
+            local function modify_cookie(cookie)
+                if cookie:match("SameSite=Strict") or cookie:match("SameSite=Lax") then
+                    local modified = cookie:gsub("SameSite=Strict", "SameSite=None")
+                                          :gsub("SameSite=Lax", "SameSite=None")
+
+                    if not modified:match("Secure") then
+                        modified = modified .. "; Secure"
+                    end
+
+                    return modified
+                end
+                return cookie
+            end
+
+            if type(headers) == "table" then
+                for i, cookie in ipairs(headers) do
+                    headers[i] = modify_cookie(cookie)
+                end
+                ngx.header["Set-Cookie"] = headers
+            else
+                ngx.header["Set-Cookie"] = modify_cookie(headers)
+            end
+        end
+
+        local uri = ngx.var.uri or ""
+
+        if uri:match("^/baw%-bawins1/ProcessPortal") then
+            local csp = ngx.header["Content-Security-Policy"]
+
+            local allowed_frame_ancestors = {
+                "http://crmcauat365.saib.com.sa",
+                "https://crmcauat365.saib.com.sa"
+            }
+
+            local function add_frame_ancestors(policy)
+                if type(policy) ~= "string" then
+                    return policy
+                end
+
+                if not policy:find("frame%-ancestors") then
+                    policy = policy ..
+                        "; frame-ancestors " ..
+                        table.concat(allowed_frame_ancestors, " ")
+                    return policy
+                end
+
+                for _, origin in ipairs(allowed_frame_ancestors) do
+                    if not policy:find(origin, 1, true) then
+                        policy = policy:gsub(
+                            "frame%-ancestors%s+",
+                            "frame-ancestors " .. origin .. " ",
+                            1
+                        )
+                    end
+                end
+
+                return policy
+            end
+
+            if type(csp) == "table" then
+                for i, policy in ipairs(csp) do
+                    csp[i] = add_frame_ancestors(policy)
+                end
+                ngx.header["Content-Security-Policy"] = csp
+            elseif csp then
+                ngx.header["Content-Security-Policy"] =
+                    add_frame_ancestors(csp)
+            end
+        end
+    }
+  extensions: |
+    [
+      {
+          "extension_point_id": "zen_front_door",
+          "extension_name": "samesite-none-extension",
+          "details": {
+            "upstream_conf": "samesite-none.conf"
+          }
+      }
+    ]
+
+
+
+
+
+
+
+
+export NS=bawuat
+
+oc delete pod -n "$NS" -l component=ibm-nginx
+
+sleep 15
+
+oc wait --for=condition=Ready pod \
+  -n "$NS" \
+  -l component=ibm-nginx \
+  --timeout=300s
+
+oc get pods -n "$NS" -l component=ibm-nginx
+
+
+
+
+
+
+export NS=bawuat
 
 for POD in $(oc get pods -n "$NS" \
   -l component=ibm-nginx \
@@ -11,104 +141,11 @@ for POD in $(oc get pods -n "$NS" \
 
   oc exec -n "$NS" "$POD" -c "$CONTAINER" -- sh -c \
     'nginx -T 2>/dev/null |
-     grep -n -i -A4 -B4 "frame-ancestors\|content-security-policy"'
+     grep -n -i -A35 -B5 "crmcauat365\|frame%-ancestors\|Content-Security-Policy"'
 
 done
-===== ibm-nginx-7bbbf446fc-22fk6 / ibm-nginx-container =====
-686-                location /ua_legacy/auth.html
-687-                {
-688-                        add_header X-Content-Type-Options nosniff;
-689-                        add_header X-XSS-Protection "1; mode=block";
-690:                        add_header Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline';";
-691-                        add_header Strict-Transport-Security "max-age=31536000";
-692-                        add_header X-Frame-Options "SAMEORIGIN";
-693-                        alias /nginx_data/html/auth.html;
-694-                }
---
-765-add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
-766-proxy_buffer_size 8k;
-767-
-768-# configuration file /user-home/_global_/security-headers.d/csp-headers.conf:
-769:add_header Content-Security-Policy "object-src 'self'; script-src 'self' 'unsafe-eval' https://www.ibm.com https://cdn.walkme.com 'unsafe-inline' data: blob:; default-src 'self' 'unsafe-inline' https://www.ibm.com https://cdn.walkme.com 'unsafe-eval' data: blob:; frame-src https://cdn.walkme.com $http_host data: blob:;frame-ancestors $http_host data: blob:;form-action $http_host data: blob:;";
-770-# configuration file /nginx_data/extensions/locations/bawuat_bawuat-bas-extension_ie_120.conf:
-771-location /bas/bpm/notification/cometd
-772-{
-773-  set $http_basaffinityvars '';
-===== ibm-nginx-7bbbf446fc-lqqgj / ibm-nginx-container =====
-686-                location /ua_legacy/auth.html
-687-                {
-688-                        add_header X-Content-Type-Options nosniff;
-689-                        add_header X-XSS-Protection "1; mode=block";
-690:                        add_header Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline';";
-691-                        add_header Strict-Transport-Security "max-age=31536000";
-692-                        add_header X-Frame-Options "SAMEORIGIN";
-693-                        alias /nginx_data/html/auth.html;
-694-                }
---
-765-add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
-766-proxy_buffer_size 8k;
-767-
-768-# configuration file /user-home/_global_/security-headers.d/csp-headers.conf:
-769:add_header Content-Security-Policy "object-src 'self'; script-src 'self' 'unsafe-eval' https://www.ibm.com https://cdn.walkme.com 'unsafe-inline' data: blob:; default-src 'self' 'unsafe-inline' https://www.ibm.com https://cdn.walkme.com 'unsafe-eval' data: blob:; frame-src https://cdn.walkme.com $http_host data: blob:;frame-ancestors $http_host data: blob:;form-action $http_host data: blob:;";
-770-# configuration file /nginx_data/extensions/locations/bawuat_bawuat-bas-extension_ie_120.conf:
-771-location /bas/bpm/notification/cometd
-772-{
-773-  set $http_basaffinityvars '';
-===== ibm-nginx-7bbbf446fc-r4j5h / ibm-nginx-container =====
-686-                location /ua_legacy/auth.html
-687-                {
-688-                        add_header X-Content-Type-Options nosniff;
-689-                        add_header X-XSS-Protection "1; mode=block";
-690:                        add_header Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline';";
-691-                        add_header Strict-Transport-Security "max-age=31536000";
-692-                        add_header X-Frame-Options "SAMEORIGIN";
-693-                        alias /nginx_data/html/auth.html;
-694-                }
---
-765-add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
-766-proxy_buffer_size 8k;
-767-
-768-# configuration file /user-home/_global_/security-headers.d/csp-headers.conf:
-769:add_header Content-Security-Policy "object-src 'self'; script-src 'self' 'unsafe-eval' https://www.ibm.com https://cdn.walkme.com 'unsafe-inline' data: blob:; default-src 'self' 'unsafe-inline' https://www.ibm.com https://cdn.walkme.com 'unsafe-eval' data: blob:; frame-src https://cdn.walkme.com $http_host data: blob:;frame-ancestors $http_host data: blob:;form-action $http_host data: blob:;";
-770-# configuration file /nginx_data/extensions/locations/bawuat_bawuat-bas-extension_ie_120.conf:
-771-location /bas/bpm/notification/cometd
-772-{
-773-  set $http_basaffinityvars '';
-[g552bipe-byt@sitlxutcpap217 ~]$
 
 
 
 
-
-
-
-
-
-===== Response 0 =====
-URL: https://cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/baw-bawins1/ProcessPortal/
-Status: 302
-Content-Security-Policy: object-src 'self'; script-src 'self' 'unsafe-eval' https://www.ibm.com https://cdn.walkme.com 'unsafe-inline' data: blob:; default-src 'self' 'unsafe-inline' https://www.ibm.com https://cdn.walkme.com 'unsafe-eval' data: blob:; frame-src https://cdn.walkme.com cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com data: blob:;frame-ancestors cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com data: blob:;form-action cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com data: blob:;
-X-Frame-Options: SAMEORIGIN
-Location: https://cp-console-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/idprovider/v1/auth/authorize
-
-===== Response 1 =====
-URL: https://cp-console-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/idprovider/v1/auth/authorize
-Status: 301
-Content-Security-Policy: default-src 'self'; form-action 'self'; frame-ancestors 'self' https://crmcauat365.saib.com.sa; connect-src 'self'
-X-Frame-Options: SAMEORIGIN
-Location: https://cp-console-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/idauth/oidc/endpoint/OP/authorize
-
-===== Response 2 =====
-URL: https://cp-console-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/idauth/oidc/endpoint/OP/authorize
-Status: 302
-Content-Security-Policy: None
-X-Frame-Options: None
-Location: https://cp-console-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/oidc/login.jsp
-
-===== Response 3 =====
-URL: https://cp-console-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/oidc/login.jsp
-Status: 200
-Content-Security-Policy: frame-ancestors 'self' https://crmcauat365.saib.com.sa; connect-src 'self';
-X-Frame-Options: None
-Location:
-[g552bipe-byt@sitlxutcpap217 ~]$
+EOF
