@@ -19,3 +19,6 @@ spec:
     environment_config:
       content_security_policy_additional_frame_ancestor:
       - "https://crmcauat365.saib.com.sa"
+
+
+environment_config: 'content_security_policy_additional_script_src:[''*.saib.com.sa''] content_security_policy_additional_connect_src:[''*.saib.com.sa''] content_security_policy_additional_font_src:[''*.saib.com.sa'']'
