@@ -1,5 +1,10 @@
-HOST=cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com
+[g552bipe-byt@sitlxutcpap217 ~]$ HOST=cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com
 
 curl -sk -D - -o /dev/null \
   "https://$HOST/baw-bawins1/ProcessPortal/" |
   grep -iE '^HTTP/|^content-security-policy:|^x-frame-options:|^location:'
+HTTP/1.1 302 Found
+location: https://cp-console-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/idprovider/v1/auth/authorize?successRedirect=%2Fauth%2Flogin%2Foidc%2Fcallback&failureRedirect=%2Fauth%2Flogin%2Fsso%2Funauthenticated&response_type=code&client_id=o3c1xfuxr9pgu0bn86wzqi69befsqp90&redirect_uri=https%3A%2F%2Fcpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com%2Fauth%2Flogin%2Foidc%2Fcallback&scope=openid%20email&state=jj0cgx9qxt
+x-frame-options: SAMEORIGIN
+content-security-policy: object-src 'self'; script-src 'self' 'unsafe-eval' https://www.ibm.com https://cdn.walkme.com 'unsafe-inline' data: blob:; default-src 'self' 'unsafe-inline' https://www.ibm.com https://cdn.walkme.com 'unsafe-eval' data: blob:; frame-src https://cdn.walkme.com cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com data: blob:;frame-ancestors cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com data: blob:;form-action cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com data: blob:;
+[g552bipe-byt@sitlxutcpap217 ~]$
