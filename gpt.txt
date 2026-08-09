@@ -1,4 +1,4 @@
-export NS=bawuat
+[g552bipe-byt@sitlxutcpap217 ~]$ export NS=bawuat
 
 for POD in $(oc get pods -n "$NS" \
   -l component=ibm-nginx \
@@ -14,6 +14,67 @@ for POD in $(oc get pods -n "$NS" \
      grep -n -i -A4 -B4 "frame-ancestors\|content-security-policy"'
 
 done
+===== ibm-nginx-7bbbf446fc-22fk6 / ibm-nginx-container =====
+686-                location /ua_legacy/auth.html
+687-                {
+688-                        add_header X-Content-Type-Options nosniff;
+689-                        add_header X-XSS-Protection "1; mode=block";
+690:                        add_header Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline';";
+691-                        add_header Strict-Transport-Security "max-age=31536000";
+692-                        add_header X-Frame-Options "SAMEORIGIN";
+693-                        alias /nginx_data/html/auth.html;
+694-                }
+--
+765-add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
+766-proxy_buffer_size 8k;
+767-
+768-# configuration file /user-home/_global_/security-headers.d/csp-headers.conf:
+769:add_header Content-Security-Policy "object-src 'self'; script-src 'self' 'unsafe-eval' https://www.ibm.com https://cdn.walkme.com 'unsafe-inline' data: blob:; default-src 'self' 'unsafe-inline' https://www.ibm.com https://cdn.walkme.com 'unsafe-eval' data: blob:; frame-src https://cdn.walkme.com $http_host data: blob:;frame-ancestors $http_host data: blob:;form-action $http_host data: blob:;";
+770-# configuration file /nginx_data/extensions/locations/bawuat_bawuat-bas-extension_ie_120.conf:
+771-location /bas/bpm/notification/cometd
+772-{
+773-  set $http_basaffinityvars '';
+===== ibm-nginx-7bbbf446fc-lqqgj / ibm-nginx-container =====
+686-                location /ua_legacy/auth.html
+687-                {
+688-                        add_header X-Content-Type-Options nosniff;
+689-                        add_header X-XSS-Protection "1; mode=block";
+690:                        add_header Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline';";
+691-                        add_header Strict-Transport-Security "max-age=31536000";
+692-                        add_header X-Frame-Options "SAMEORIGIN";
+693-                        alias /nginx_data/html/auth.html;
+694-                }
+--
+765-add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
+766-proxy_buffer_size 8k;
+767-
+768-# configuration file /user-home/_global_/security-headers.d/csp-headers.conf:
+769:add_header Content-Security-Policy "object-src 'self'; script-src 'self' 'unsafe-eval' https://www.ibm.com https://cdn.walkme.com 'unsafe-inline' data: blob:; default-src 'self' 'unsafe-inline' https://www.ibm.com https://cdn.walkme.com 'unsafe-eval' data: blob:; frame-src https://cdn.walkme.com $http_host data: blob:;frame-ancestors $http_host data: blob:;form-action $http_host data: blob:;";
+770-# configuration file /nginx_data/extensions/locations/bawuat_bawuat-bas-extension_ie_120.conf:
+771-location /bas/bpm/notification/cometd
+772-{
+773-  set $http_basaffinityvars '';
+===== ibm-nginx-7bbbf446fc-r4j5h / ibm-nginx-container =====
+686-                location /ua_legacy/auth.html
+687-                {
+688-                        add_header X-Content-Type-Options nosniff;
+689-                        add_header X-XSS-Protection "1; mode=block";
+690:                        add_header Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline';";
+691-                        add_header Strict-Transport-Security "max-age=31536000";
+692-                        add_header X-Frame-Options "SAMEORIGIN";
+693-                        alias /nginx_data/html/auth.html;
+694-                }
+--
+765-add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
+766-proxy_buffer_size 8k;
+767-
+768-# configuration file /user-home/_global_/security-headers.d/csp-headers.conf:
+769:add_header Content-Security-Policy "object-src 'self'; script-src 'self' 'unsafe-eval' https://www.ibm.com https://cdn.walkme.com 'unsafe-inline' data: blob:; default-src 'self' 'unsafe-inline' https://www.ibm.com https://cdn.walkme.com 'unsafe-eval' data: blob:; frame-src https://cdn.walkme.com $http_host data: blob:;frame-ancestors $http_host data: blob:;form-action $http_host data: blob:;";
+770-# configuration file /nginx_data/extensions/locations/bawuat_bawuat-bas-extension_ie_120.conf:
+771-location /bas/bpm/notification/cometd
+772-{
+773-  set $http_basaffinityvars '';
+[g552bipe-byt@sitlxutcpap217 ~]$
 
 
 
@@ -22,36 +83,32 @@ done
 
 
 
-python3 - <<'PY'
-import requests
-import urllib3
-from urllib.parse import urlsplit
 
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+===== Response 0 =====
+URL: https://cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/baw-bawins1/ProcessPortal/
+Status: 302
+Content-Security-Policy: object-src 'self'; script-src 'self' 'unsafe-eval' https://www.ibm.com https://cdn.walkme.com 'unsafe-inline' data: blob:; default-src 'self' 'unsafe-inline' https://www.ibm.com https://cdn.walkme.com 'unsafe-eval' data: blob:; frame-src https://cdn.walkme.com cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com data: blob:;frame-ancestors cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com data: blob:;form-action cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com data: blob:;
+X-Frame-Options: SAMEORIGIN
+Location: https://cp-console-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/idprovider/v1/auth/authorize
 
-url = "https://cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/baw-bawins1/ProcessPortal/"
+===== Response 1 =====
+URL: https://cp-console-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/idprovider/v1/auth/authorize
+Status: 301
+Content-Security-Policy: default-src 'self'; form-action 'self'; frame-ancestors 'self' https://crmcauat365.saib.com.sa; connect-src 'self'
+X-Frame-Options: SAMEORIGIN
+Location: https://cp-console-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/idauth/oidc/endpoint/OP/authorize
 
-def clean_url(value):
-    if not value:
-        return ""
-    parsed = urlsplit(value)
-    return f"{parsed.scheme}://{parsed.netloc}{parsed.path}"
+===== Response 2 =====
+URL: https://cp-console-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/idauth/oidc/endpoint/OP/authorize
+Status: 302
+Content-Security-Policy: None
+X-Frame-Options: None
+Location: https://cp-console-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/oidc/login.jsp
 
-session = requests.Session()
-response = session.get(
-    url,
-    verify=False,
-    timeout=30,
-    allow_redirects=True
-)
-
-chain = list(response.history) + [response]
-
-for index, item in enumerate(chain):
-    print(f"\n===== Response {index} =====")
-    print("URL:", clean_url(item.url))
-    print("Status:", item.status_code)
-    print("Content-Security-Policy:", item.headers.get("Content-Security-Policy"))
-    print("X-Frame-Options:", item.headers.get("X-Frame-Options"))
-    print("Location:", clean_url(item.headers.get("Location")))
-PY
+===== Response 3 =====
+URL: https://cp-console-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/oidc/login.jsp
+Status: 200
+Content-Security-Policy: frame-ancestors 'self' https://crmcauat365.saib.com.sa; connect-src 'self';
+X-Frame-Options: None
+Location:
+[g552bipe-byt@sitlxutcpap217 ~]$
