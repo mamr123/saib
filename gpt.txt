@@ -1,31 +1,3 @@
-export NS=bawuat
-
-oc apply -f samesite-only.backup.yaml
-
-oc delete pod -n "$NS" -l component=ibm-nginx
-
-sleep 15
-
-oc wait --for=condition=Ready pod \
-  -n "$NS" \
-  -l component=ibm-nginx \
-  --timeout=300s
-
-
-
-spec:
-  baw_configuration:
-  - name: bawins1
-    environment_config:
-      content_security_policy_additional_frame_ancestor:
-      - "https://crmcauat365.saib.com.sa"
-
-
-    content_security_policy_additional_script_src:
-    - "https://*.saib.com.sa"
-    content_security_policy_additional_connect_src:
-    - "https://*.saib.com.sa"
-    content_security_policy_additional_font_src:
-    - "https://*.saib.com.sa"
-    content_security_policy_additional_frame_ancestor:
-    - "https://crmcauat365.saib.com.sa"
+https://cpd-
+bawuat.apps.cp4baautasiobank.sipnet2.sabib.com/
+bawins1/ProcessServerInternal/onlinedeployment?deploy=true:
