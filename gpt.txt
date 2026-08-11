@@ -1,23 +1,4 @@
-Events:
-  Type     Reason          Age                  From               Message
-  ----     ------          ----                 ----               -------
-  Normal   Scheduled       7m18s                default-scheduler  Successfully assigned bawuat/kafka-connect-7659876896-8fqfc to cp4bauatsaibocp-4f4s2-worker-ds-hq-ocp-uat-03-tq2f7
-  Normal   AddedInterface  7m18s                multus             Add eth0 [10.17.26.241/23] from ovn-kubernetes
-  Normal   Pulling         7m18s                kubelet            Pulling image "confluentinc/cp-kafka-connect-base:7.6.1"
-  Normal   Pulled          6m9s                 kubelet            Successfully pulled image "confluentinc/cp-kafka-connect-base:7.6.1" in 1m9.078s (1m9.078s including waiting). Image size: 1649701696 bytes.
-  Warning  BackOff         99s                  kubelet            Back-off restarting failed container install-es-connector in pod kafka-connect-7659876896-8fqfc_bawuat(8a8056c8-d3d3-4802-bd59-e77d4b07b8f3)
-  Normal   Pulled          89s (x2 over 3m54s)  kubelet            Container image "confluentinc/cp-kafka-connect-base:7.6.1" already present on machine
-  Normal   Created         88s (x3 over 6m9s)   kubelet            Created container: install-es-connector
-  Normal   Started         88s (x3 over 6m9s)   kubelet            Started container install-es-connector
-[g552bipe-byt@sitlxutcpap217 ~]$ oc logs kafka-connect-7659876896-8fqfc
-Defaulted container "kafka-connect" out of: kafka-connect, install-es-connector (init)
-Error from server (BadRequest): container "kafka-connect" in pod "kafka-connect-7659876896-8fqfc" is waiting to start: PodInitializing
-[g552bipe-byt@sitlxutcpap217 ~]$ oc logs kafka-connect-7659876896-8fqfc -c install-es-connector
-Running in a "--no-prompt" mode
-[g552bipe-byt@sitlxutcpap217 ~]$ oc get po kafka-connect-7659876896-8fqfc
-NAME                             READY   STATUS     RESTARTS        AGE
-kafka-connect-7659876896-8fqfc   0/1     Init:0/1   2 (2m19s ago)   7m58s
-
+oc get pod kafka-connect-7659876896-8fqfc -o jsonpath='{.status.initContainerStatuses[0].lastState.terminated}'
 
 curl -X POST -H "Content-Type: application/json" \
   --data @elasticsearch-sink-connector.json \
