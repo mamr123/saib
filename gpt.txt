@@ -1,181 +1,23 @@
-# from a CP4BA pod that has it mounted at /opt/ibm/bawfile/
-oc cp bawuat/icp4adeploy-bawins1-baw-server-0:"/opt/ibm/bawfile/kafka.client.truststore 1.jks" ./truststore.jks
+Events:
+  Type     Reason          Age                  From               Message
+  ----     ------          ----                 ----               -------
+  Normal   Scheduled       7m18s                default-scheduler  Successfully assigned bawuat/kafka-connect-7659876896-8fqfc to cp4bauatsaibocp-4f4s2-worker-ds-hq-ocp-uat-03-tq2f7
+  Normal   AddedInterface  7m18s                multus             Add eth0 [10.17.26.241/23] from ovn-kubernetes
+  Normal   Pulling         7m18s                kubelet            Pulling image "confluentinc/cp-kafka-connect-base:7.6.1"
+  Normal   Pulled          6m9s                 kubelet            Successfully pulled image "confluentinc/cp-kafka-connect-base:7.6.1" in 1m9.078s (1m9.078s including waiting). Image size: 1649701696 bytes.
+  Warning  BackOff         99s                  kubelet            Back-off restarting failed container install-es-connector in pod kafka-connect-7659876896-8fqfc_bawuat(8a8056c8-d3d3-4802-bd59-e77d4b07b8f3)
+  Normal   Pulled          89s (x2 over 3m54s)  kubelet            Container image "confluentinc/cp-kafka-connect-base:7.6.1" already present on machine
+  Normal   Created         88s (x3 over 6m9s)   kubelet            Created container: install-es-connector
+  Normal   Started         88s (x3 over 6m9s)   kubelet            Started container install-es-connector
+[g552bipe-byt@sitlxutcpap217 ~]$ oc logs kafka-connect-7659876896-8fqfc
+Defaulted container "kafka-connect" out of: kafka-connect, install-es-connector (init)
+Error from server (BadRequest): container "kafka-connect" in pod "kafka-connect-7659876896-8fqfc" is waiting to start: PodInitializing
+[g552bipe-byt@sitlxutcpap217 ~]$ oc logs kafka-connect-7659876896-8fqfc -c install-es-connector
+Running in a "--no-prompt" mode
+[g552bipe-byt@sitlxutcpap217 ~]$ oc get po kafka-connect-7659876896-8fqfc
+NAME                             READY   STATUS     RESTARTS        AGE
+kafka-connect-7659876896-8fqfc   0/1     Init:0/1   2 (2m19s ago)   7m58s
 
-oc create secret generic kafka-x-tls-secret \
-  --from-file=truststore.jks=./truststore.jks \
-  --from-literal=truststore-password=test1234 \
-
-
-
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: kafka-connect
-  namespace: bawuat          # <-- create this namespace on cluster Y first
-  labels:
-    app: kafka-connect
-spec:
-  replicas: 1                          # bump to 3 later for HA once this works; all replicas
-                                        # share the same CONNECT_GROUP_ID and self-coordinate
-  selector:
-    matchLabels:
-      app: kafka-connect
-  template:
-    metadata:
-      labels:
-        app: kafka-connect
-    spec:
-      initContainers:
-        - name: install-es-connector
-          image: confluentinc/cp-kafka-connect-base:7.6.1
-          command:
-            - sh
-            - -c
-            - |
-              confluent-hub install --no-prompt --component-dir /plugins \
-                confluentinc/kafka-connect-elasticsearch:latest
-          volumeMounts:
-            - name: plugins
-              mountPath: /plugins
-      containers:
-        - name: kafka-connect
-          image: confluentinc/cp-kafka-connect-base:7.6.1
-          ports:
-            - containerPort: 8083
-              name: rest-api
-          env:
-            # --- Kafka on cluster X (OpenShift Route, TLS passthrough on 443) ---
-            - name: CONNECT_BOOTSTRAP_SERVERS
-              value: "bootstrap-datalake.apps.devsaibocp.saibnet2.saib.com:443"
-
-            # --- Connect worker identity / internal topics (live on cluster X's Kafka) ---
-            - name: CONNECT_GROUP_ID
-              value: "connect-cluster-y"
-            - name: CONNECT_CONFIG_STORAGE_TOPIC
-              value: "connect-configs"
-            - name: CONNECT_OFFSET_STORAGE_TOPIC
-              value: "connect-offsets"
-            - name: CONNECT_STATUS_STORAGE_TOPIC
-              value: "connect-status"
-            - name: CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR
-              value: "1"                                    # match X's broker count / topic RF policy
-            - name: CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR
-              value: "1"
-            - name: CONNECT_STATUS_STORAGE_REPLICATION_FACTOR
-              value: "1"
-
-            # --- Converters ---
-            - name: CONNECT_KEY_CONVERTER
-              value: "org.apache.kafka.connect.json.JsonConverter"
-            - name: CONNECT_VALUE_CONVERTER
-              value: "org.apache.kafka.connect.json.JsonConverter"
-            - name: CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE
-              value: "false"
-            - name: CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE
-              value: "false"
-            - name: CONNECT_INTERNAL_KEY_CONVERTER
-              value: "org.apache.kafka.connect.json.JsonConverter"
-            - name: CONNECT_INTERNAL_VALUE_CONVERTER
-              value: "org.apache.kafka.connect.json.JsonConverter"
-
-            # --- REST / plugins ---
-            - name: CONNECT_REST_PORT
-              value: "8083"
-            - name: CONNECT_REST_ADVERTISED_HOST_NAME
-              value: "kafka-connect-service"                 # <-- matches Service name below
-            - name: CONNECT_PLUGIN_PATH
-              value: "/usr/share/java,/plugins"
-            - name: CONNECT_LOG4J_ROOT_LOGLEVEL
-              value: "INFO"
-
-            # --- Kafka X requires SSL (truststore only, no client cert / no SASL mentioned) ---
-            - name: CONNECT_SECURITY_PROTOCOL
-              value: "SSL"
-            - name: CONNECT_SSL_TRUSTSTORE_LOCATION
-              value: "/etc/kafka-x-tls/truststore.jks"
-            - name: CONNECT_SSL_TRUSTSTORE_TYPE
-              value: "JKS"
-            - name: CONNECT_SSL_TRUSTSTORE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: kafka-x-tls-secret
-                  key: truststore-password
-            # If Kafka X's Route cert doesn't match the bootstrap hostname's SAN/CN, or you
-            # hit hostname verification errors, you may additionally need:
-            # - name: CONNECT_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
-            #   value: ""
-
-          volumeMounts:
-            - name: plugins
-              mountPath: /plugins
-            - name: kafka-x-tls
-              mountPath: /etc/kafka-x-tls
-              readOnly: true
-
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 8083
-            initialDelaySeconds: 20
-            periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 8083
-            initialDelaySeconds: 30
-            periodSeconds: 15
-          resources:
-            requests:
-              cpu: "250m"
-              memory: "512Mi"
-            limits:
-              cpu: "1"
-              memory: "1Gi"
-
-      volumes:
-        - name: plugins
-          emptyDir: {}
-        - name: kafka-x-tls
-          secret:
-            secretName: kafka-x-tls-secret
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: kafka-connect-service
-  namespace: bawuat
-spec:
-  selector:
-    app: kafka-connect
-  ports:
-    - name: rest-api
-      port: 8083
-      targetPort: 8083
-
-
-
-
-
-{
-  "name": "elasticsearch-sink",
-  "config": {
-    "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
-    "tasks.max": "1",
-    "topics": "saib.bpm.application.audit,saib.bpm.integration.audit",
-    "connection.url": "https://elasticsearch-cluster-z:9200",
-    "connection.username": "elastic-user",
-    "connection.password": "changeme",
-    "type.name": "_doc",
-    "key.ignore": "true",
-    "schema.ignore": "true",
-    "behavior.on.null.values": "delete",
-    "behavior.on.malformed.documents": "warn"
-  }
-}
-
-
-oc apply -f kafka-connect-deployment.yaml
 
 curl -X POST -H "Content-Type: application/json" \
   --data @elasticsearch-sink-connector.json \
