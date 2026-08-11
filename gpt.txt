@@ -1,4 +1,14 @@
-oc get pod kafka-connect-7659876896-8fqfc -o jsonpath='{.status.initContainerStatuses[0].lastState.terminated}'
+[g552bipe-byt@sitlxutcpap217 ~]$ oc logs kafka-connect-7659876896-8fqfc -c install-es-connector
+Running in a "--no-prompt" mode
+[g552bipe-byt@sitlxutcpap217 ~]$ oc get pod kafka-connect-7659876896-8fqfc -o jsonpath='{.status.initContainerStatuses[0].lastState.terminated}'
+{"containerID":"cri-o://37a69e479cc35a09cab979f69be0ea329d704bd8acfef1a9a87dfd7e49eb078a","exitCode":7,"finishedAt":"2026-08-11T12:23:57Z","reason":"Error","startedAt":"2026-08-11T12:21:43Z"}[g552bipe-byt@sitlxutcpap217 ~]$ oc get pod kafka-connoc logs kafka-connect-7659876896-8fqfc -c install-es-connector
+Running in a "--no-prompt" mode
+java.net.ConnectException: Connection timed out (Connection timed out)
+
+Error: Unknown error
+[g552bipe-byt@sitlxutcpap217 ~]$
+
+
 
 curl -X POST -H "Content-Type: application/json" \
   --data @elasticsearch-sink-connector.json \
