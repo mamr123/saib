@@ -1,4 +1,4 @@
-# DNS + TLS handshake test from inside the BAW pod
-oc exec -it <baw-pod>  -- bash -c \
-  "getent hosts bootstrap-datalake.apps.devsaibocp.saibnet2.saib.com && \
-   timeout 10 openssl s_client -connect bootstrap-datalake.apps.devsaibocp.saibnet2.saib.com:443 </dev/null 2>&1 | head -30"
+security.protocol=SSL
+ssl.truststore.location=/tmp/truststore.jks
+ssl.truststore.password=test1234
+ssl.truststore.type=JKS
