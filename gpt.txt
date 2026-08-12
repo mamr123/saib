@@ -1,4 +1,5 @@
-security.protocol=SSL
-ssl.truststore.location=/tmp/truststore.jks
-ssl.truststore.password=test1234
-ssl.truststore.type=JKS
+java -jar BAWKafkaIntegration-1.0.9.jar fromBeginningNoCommit \
+  "bootstrap-datalake.apps.devsaibocp.saibnet2.saib.com:443" \
+  "saib.bpm.application.audit" "cli-test" "SSL" \
+  "/opt/ibm/bawfile/kafka.client.truststore 1.jks" "test1234" "JKS" \
+  "20000" "20"
