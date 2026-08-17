@@ -1,1 +1,9 @@
-https://cpd-bawdev.apps.cp4badevsaibocp.saibnet2.saib.com/bas/ProcessPortal/dashboards/SYSRP/RESPONSIVE_WORK
+openssl s_client -connect cpd-bawdev.apps.cp4badevsaibocp.saibnet2.saib.com:443 -servername cpd-bawdev.apps.cp4badevsaibocp.saibnet2.saib.com -showcerts </dev/null
+
+
+
+openssl s_client -connect cpd-bawdev.apps.cp4badevsaibocp.saibnet2.saib.com:443 -servername cpd-bawdev.apps.cp4badevsaibocp.saibnet2.saib.com </dev/null | openssl x509 -noout -text | grep -A1 "Subject Alternative Name"
+
+
+
+openssl s_client -connect cpd-bawdev.apps.cp4badevsaibocp.saibnet2.saib.com:443 -CAfile /etc/pki/tls/certs/ca-bundle.crt </dev/null
