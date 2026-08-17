@@ -1,9 +1,1 @@
-java -jar BAWKafkaIntegration-1.0.8.jar \
-  "bootstrap-datalake.apps.devsaibocp.saibnet2.saib.com:443" \
-  "saib.bpm.application.audit" \
-  "test-key-1" \
-  "hello from BA Studio pod $(date +%H:%M:%S)" \
-  "SSL" \
-  "/opt/ibm/bawfile/kafka.client.truststore 1.jks" \
-  "test1234" \
-  "JKS"
+https://cpd-bawdev.apps.cp4badevsaibocp.saibnet2.saib.com/bas/ProcessPortal/dashboards/SYSRP/RESPONSIVE_WORK
