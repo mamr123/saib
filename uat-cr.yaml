@@ -1,0 +1,746 @@
+apiVersion: icp4a.ibm.com/v1
+kind: ICP4ACluster
+metadata:
+  creationTimestamp: "2026-03-01T08:58:33Z"
+  generation: 77
+  labels:
+    app.kubernetes.io/instance: ibm-dba
+    app.kubernetes.io/managed-by: ibm-dba
+    app.kubernetes.io/name: ibm-dba
+    cp4ba.ibm.com/backup-type: mandatory
+    release: 25.0.0
+  name: icp4adeploy
+  namespace: bawuat
+  resourceVersion: "388531628"
+  uid: e7c4f839-6854-4973-8881-6fd2a0aa3ff1
+spec:
+  ads_configuration:
+    decision_designer:
+      enabled: false
+    decision_runtime:
+      enabled: true
+      event_emitter:
+        enabled: true
+  appVersion: 25.0.0
+  application_engine_configuration:
+  - admin_secret_name: icp4adeploy-workspace-aae-app-engine-admin-secret
+    admin_user: K341USSA
+    database:
+      alternative_host: ""
+      alternative_port: ""
+      db_cert_secret_name: db-cert
+      dc_use_postgres: false
+      enable_ssl: true
+      host: STWUTBPMDB001.saibsit.com
+      name: AE
+      port: "18723"
+      type: sqlserver
+    name: workspace
+    session:
+      use_external_store: false
+  bai_configuration: null
+  baml_configuration:
+    intelligent_task_prioritization: null
+    workforce_insights: null
+  bastudio_configuration:
+    admin_secret_name: icp4adeploy-bas-admin-secret
+    admin_user: K341USSA
+    database:
+      alternative_host: ""
+      alternative_port: ""
+      certificate_secret_name: db-cert
+      dc_use_postgres: false
+      host: STWUTBPMDB001.saibsit.com
+      name: BASDB
+      port: "18723"
+      ssl_enabled: true
+      type: sqlserver
+    playback_server:
+      admin_secret_name: playback-server-admin-secret
+      admin_user: K341USSA
+      database:
+        alternative_host: ""
+        alternative_port: ""
+        db_cert_secret_name: db-cert
+        dc_use_postgres: false
+        enable_ssl: true
+        host: STWUTBPMDB001.saibsit.com
+        name: BASPB
+        port: "18723"
+        type: sqlserver
+      session:
+        use_external_store: false
+  baw_configuration:
+  - admin_user: K341USSA
+    capabilities: workflow
+    case:
+      domain_name: P8DOMAIN
+      object_store_name_dos: BAWINS1DOS
+      tos_list:
+      - object_store_name: BAWINS1TOS
+    content_integration:
+      domain_name: P8DOMAIN
+      init_job_image:
+        pull_policy: IfNotPresent
+        repository: cp.icr.io/cp/cp4a/baw/iaws-ps-content-integration
+        tag: 25.0.0-IF004-amd64-temp-fix-V1
+      object_store_name: BAWINS1DOCS
+    custom_xml_secret_name: custom-liberty-secret
+    database:
+      database_name: BAWADB
+      db_cert_secret_name: db-cert
+      dc_use_postgres: false
+      enable_ssl: true
+      hadr:
+        standbydb_host: ""
+        standbydb_port: ""
+      port: "18723"
+      secret_name: ibm-baw-wfs-server-db-secret
+      server_name: STWUTBPMDB001.saibsit.com
+      type: sqlserver
+      use_custom_jdbc_drivers: false
+    env_type: Test
+    environment_config:
+      content_security_policy_additional_connect_src:
+      - https://*.saib.com.sa
+      content_security_policy_additional_font_src:
+      - https://*.saib.com.sa
+      content_security_policy_additional_frame_ancestor:
+      - https://crmcauat365.saib.com.sa
+      content_security_policy_additional_script_src:
+      - https://*.saib.com.sa
+    full_text_search:
+      enable: true
+    jms:
+      is_embedded: false
+      resouces:
+        limits:
+          memory: 5Gi
+        requests:
+          memory: 3Gi
+    lombardi_custom_xml_secret_name: custom-lombardi-secret
+    name: bawins1
+    replicas: 3
+    resources:
+      limits:
+        cpu: 4
+        memory: 16Gi
+      requests:
+        cpu: 2
+        memory: 8Gi
+    security_context:
+      fs_groupchangepolicy: null
+      selinux_options: null
+    storage:
+      size_for_logstore: 30Gi
+    workflow_center:
+      heartbeat_interval: 30
+      secret_name: wc-secret
+      url: https://cpd-bawdev.apps.cp4badevsaibocp.saibnet2.saib.com/bas/ProcessCenter
+  datasource_configuration:
+    dc_ads_runtime_datasource:
+      current_schema: adsruntime
+      database_instance_secret: ibm-ads-runtime-database
+      database_name: adsruntimedb
+      database_port: "5432"
+      database_servername: postgres-cp4ba-rw.{{ meta.namespace }}.svc
+      dc_database_type: postgresql
+      dc_use_postgres: true
+      ssl_enabled: true
+      ssl_mode: verify-ca
+      ssl_secret_name: '{{ meta.name }}-pg-client-cert-secret'
+    dc_gcd_datasource:
+      database_name: GCDDB
+      database_port: "18723"
+      database_servername: STWUTBPMDB001.saibsit.com
+      database_ssl_secret_name: db-cert
+      dc_common_gcd_datasource_name: FNGCDDS
+      dc_common_gcd_xa_datasource_name: FNGCDDSXA
+      dc_database_type: sqlserver
+      dc_hadr_max_retries_for_client_reroute: 3
+      dc_hadr_retry_interval_for_client_reroute: 15
+      dc_hadr_standby_port: ""
+      dc_hadr_standby_servername: ""
+      dc_hadr_validation_timeout: 15
+      dc_oracle_gcd_jdbc_url: ""
+      dc_use_postgres: false
+    dc_icn_datasource:
+      database_name: ICN
+      database_port: "18723"
+      database_servername: STWUTBPMDB001.saibsit.com
+      database_ssl_secret_name: db-cert
+      dc_common_icn_datasource_name: ECMClientDS
+      dc_database_type: sqlserver
+      dc_hadr_max_retries_for_client_reroute: 3
+      dc_hadr_retry_interval_for_client_reroute: 15
+      dc_hadr_standby_port: ""
+      dc_hadr_standby_servername: ""
+      dc_hadr_validation_timeout: 15
+      dc_oracle_icn_jdbc_url: ""
+      dc_use_postgres: false
+    dc_os_datasources:
+    - database_name: OS
+      database_port: "18723"
+      database_servername: STWUTBPMDB001.saibsit.com
+      database_ssl_enable: true
+      database_ssl_secret_name: db-cert
+      dc_common_os_datasource_name: FNOS1DS
+      dc_common_os_xa_datasource_name: FNOS1DSXA
+      dc_database_type: sqlserver
+      dc_hadr_max_retries_for_client_reroute: 3
+      dc_hadr_retry_interval_for_client_reroute: 15
+      dc_hadr_standby_port: ""
+      dc_hadr_standby_servername: ""
+      dc_hadr_validation_timeout: 15
+      dc_oracle_os_jdbc_url: ""
+      dc_os_label: os1
+      dc_use_postgres: false
+    - database_name: AEOS
+      database_port: "18723"
+      database_servername: STWUTBPMDB001.saibsit.com
+      database_ssl_enable: true
+      database_ssl_secret_name: db-cert
+      dc_common_os_datasource_name: FNOS2DS
+      dc_common_os_xa_datasource_name: FNOS2DSXA
+      dc_database_type: sqlserver
+      dc_hadr_max_retries_for_client_reroute: 3
+      dc_hadr_retry_interval_for_client_reroute: 15
+      dc_hadr_standby_port: ""
+      dc_hadr_standby_servername: ""
+      dc_hadr_validation_timeout: 15
+      dc_oracle_os_jdbc_url: ""
+      dc_os_label: os2
+      dc_use_postgres: false
+    - database_name: DOCS
+      database_port: "18723"
+      database_servername: STWUTBPMDB001.saibsit.com
+      database_ssl_enable: true
+      database_ssl_secret_name: db-cert
+      dc_common_os_datasource_name: BAWINS1DOCS
+      dc_common_os_xa_datasource_name: BAWINS1DOCSXA
+      dc_database_type: sqlserver
+      dc_hadr_max_retries_for_client_reroute: 3
+      dc_hadr_retry_interval_for_client_reroute: 15
+      dc_hadr_standby_port: ""
+      dc_hadr_standby_servername: ""
+      dc_hadr_validation_timeout: 15
+      dc_oracle_os_jdbc_url: ""
+      dc_os_label: bawdocs
+      dc_use_postgres: false
+    - database_name: DOS
+      database_port: "18723"
+      database_servername: STWUTBPMDB001.saibsit.com
+      database_ssl_enable: true
+      database_ssl_secret_name: db-cert
+      dc_common_os_datasource_name: BAWINS1DOS
+      dc_common_os_xa_datasource_name: BAWINS1DOSXA
+      dc_database_type: sqlserver
+      dc_hadr_max_retries_for_client_reroute: 3
+      dc_hadr_retry_interval_for_client_reroute: 15
+      dc_hadr_standby_port: ""
+      dc_hadr_standby_servername: ""
+      dc_hadr_validation_timeout: 15
+      dc_oracle_os_jdbc_url: ""
+      dc_os_label: bawdos
+      dc_use_postgres: false
+    - database_name: TOS
+      database_port: "18723"
+      database_servername: STWUTBPMDB001.saibsit.com
+      database_ssl_enable: true
+      database_ssl_secret_name: db-cert
+      dc_common_os_datasource_name: BAWINS1TOS
+      dc_common_os_xa_datasource_name: BAWINS1TOSXA
+      dc_database_type: sqlserver
+      dc_hadr_max_retries_for_client_reroute: 3
+      dc_hadr_retry_interval_for_client_reroute: 15
+      dc_hadr_standby_port: ""
+      dc_hadr_standby_servername: ""
+      dc_hadr_validation_timeout: 15
+      dc_oracle_os_jdbc_url: ""
+      dc_os_label: bawtos
+      dc_use_postgres: false
+    dc_ssl_enabled: true
+  ecm_configuration:
+    cmis:
+      resources:
+        limits:
+          cpu: 3
+          memory: 5Gi
+        requests:
+          cpu: 2
+          memory: 3Gi
+    cpe:
+      logging_enabled: false
+      resources:
+        limits:
+          cpu: 3
+          memory: 10Gi
+        requests:
+          cpu: 2
+          memory: 6Gi
+  ibm_license: accept
+  initialize_configuration:
+    ic_icn_init_info:
+      icn_desktop:
+      - add_desktop_description: This is ICN desktop
+        add_desktop_id: P8DOMAIN
+        add_desktop_is_default: false
+        add_desktop_name: P8DOMAIN
+        add_desktop_repo_id: P8DOMAIN
+        add_desktop_repo_workflow_enable: false
+      icn_repos:
+      - add_repo_ce_wsi_url: https://{{ meta.name }}-cpe-stateless-svc.{{ meta.namespace
+          }}.svc:9443/wsi/FNCEWS40MTOM/
+        add_repo_id: P8DOMAIN
+        add_repo_os_dis_name: OS01
+        add_repo_os_sym_name: OS01
+        add_repo_protocol: FileNetP8WSI
+        add_repo_work_conn_pnt: pe_conn_os1:1
+        add_repo_workflow_enable: false
+    ic_ldap_creation:
+      ic_ldap_admin_user_name:
+      - K341USSA
+      ic_ldap_admins_groups_name:
+      - G_IBMBPM
+    ic_obj_store_creation:
+      object_stores:
+      - oc_cpe_obj_store_admin_user_groups:
+        - K341USSA
+        oc_cpe_obj_store_conn:
+          dc_os_datasource_name: FNOS1DS
+          dc_os_xa_datasource_name: FNOS1DSXA
+          name: objectstore1_connection
+        oc_cpe_obj_store_display_name: OS01
+        oc_cpe_obj_store_symb_name: OS01
+      - oc_cpe_obj_store_admin_user_groups:
+        - K341USSA
+        oc_cpe_obj_store_conn:
+          dc_os_datasource_name: FNOS2DS
+          dc_os_xa_datasource_name: FNOS2DSXA
+          name: objectstore2_connection
+        oc_cpe_obj_store_display_name: OS02
+        oc_cpe_obj_store_symb_name: OS02
+      - oc_cpe_obj_store_admin_user_groups:
+        - K341USSA
+        oc_cpe_obj_store_conn:
+          dc_os_datasource_name: BAWINS1DOCS
+          dc_os_xa_datasource_name: BAWINS1DOCSXA
+          name: DOCS_connection
+        oc_cpe_obj_store_display_name: BAWINS1DOCS
+        oc_cpe_obj_store_symb_name: BAWINS1DOCS
+      - oc_cpe_obj_store_admin_user_groups:
+        - K341USSA
+        oc_cpe_obj_store_conn:
+          dc_os_datasource_name: BAWINS1DOS
+          dc_os_xa_datasource_name: BAWINS1DOSXA
+          name: DOS_connection
+        oc_cpe_obj_store_display_name: BAWINS1DOS
+        oc_cpe_obj_store_symb_name: BAWINS1DOS
+      - oc_cpe_obj_store_admin_user_groups:
+        - K341USSA
+        oc_cpe_obj_store_conn:
+          dc_os_datasource_name: BAWINS1TOS
+          dc_os_xa_datasource_name: BAWINS1TOSXA
+          name: TOS_connection
+        oc_cpe_obj_store_display_name: BAWINS1TOS
+        oc_cpe_obj_store_enable_workflow: true
+        oc_cpe_obj_store_symb_name: BAWINS1TOS
+        oc_cpe_obj_store_workflow_admin_group: G_IBMBPM
+        oc_cpe_obj_store_workflow_config_group: G_IBMBPM
+        oc_cpe_obj_store_workflow_data_tbl_space: PRIMARY
+        oc_cpe_obj_store_workflow_pe_conn_point_name: pe_conn_os1
+  ldap_configuration:
+    ad:
+      lc_ad_gc_host: saibsit.com
+      lc_ad_gc_port: "3268"
+      lc_group_filter: (&(cn=%v)(objectcategory=group))
+      lc_user_filter: (&(sAMAccountName=%v)(objectcategory=user))
+    lc_bind_secret: ldap-bind-secret
+    lc_enable_pagination: true
+    lc_ldap_base_dn: DC=SAIBSIT,DC=COM
+    lc_ldap_group_base_dn: DC=SAIBSIT,DC=COM
+    lc_ldap_group_display_name_attr: cn
+    lc_ldap_group_member_id_map: memberOf:member
+    lc_ldap_group_membership_search_filter: (&(cn=%v)(objectcategory=group))
+    lc_ldap_group_name_attribute: '*:cn'
+    lc_ldap_port: "389"
+    lc_ldap_server: saibsit.com
+    lc_ldap_ssl_enabled: false
+    lc_ldap_ssl_secret_name: ibm-cp4ba-ldap-ssl-secret
+    lc_ldap_user_display_name_attr: sAMAccountName
+    lc_ldap_user_name_attribute: user:sAMAccountName
+    lc_pagination_size: 1000
+    lc_selected_ldap_type: Microsoft Active Directory
+  logging_configuration:
+    logging_type: default
+    mon_log_parse: true
+    mon_log_service_endpoint: https://SITLXDVELAP084.saibsit.com:9200
+    private_logging_enabled: true
+  navigator_configuration:
+    logging_enabled: true
+  shared_configuration:
+    enable_fips: false
+    encryption_key_secret: ibm-iaws-shared-key-secret
+    image_pull_secrets:
+    - ibm-entitlement-key
+    root_ca_secret: icp4a-root-ca
+    sc_content_initialization: false
+    sc_content_verification: false
+    sc_deployment_baw_license: non-production
+    sc_deployment_context: CP4A
+    sc_deployment_fncm_license: non-production
+    sc_deployment_license: non-production
+    sc_deployment_patterns: foundation,content,application,decisions_ads,workflow
+    sc_deployment_platform: OCP
+    sc_deployment_profile_size: medium
+    sc_deployment_type: Production
+    sc_drivers_url: null
+    sc_generate_sample_network_policies: false
+    sc_iam:
+      default_admin_username: ""
+    sc_image_repository: cp.icr.io
+    sc_ingress_enable: false
+    sc_is_multiple_az: false
+    sc_optional_components: ads_runtime,bai,cmis,opensearch,kafka
+    sc_run_as_user: null
+    sc_skip_ldap_config: false
+    storage_configuration:
+      sc_block_storage_classname: ocs-storagecluster-ceph-rbd
+      sc_fast_file_storage_classname: ocs-storagecluster-cephfs
+      sc_medium_file_storage_classname: ocs-storagecluster-cephfs
+      sc_slow_file_storage_classname: ocs-storagecluster-cephfs
+    trusted_certificate_list:
+    - uat-zenca-cert
+    - external-secret
+    - saibnet2-cert
+    - saibsit-cert
+    - cpd-cert
+    - bawdev-tls-zen-secret
+    - baw-routerca-secret
+    - console-secret
+  verify_configuration:
+    vc_cpe_verification:
+      vc_cpe_cbr:
+      - cbr_cpe_class_name: Document
+        cbr_cpe_obj_store_name: OS01
+        cbr_cpe_search_string: is a simple
+      vc_cpe_document:
+      - DOC_CPE_class_name: Document
+        doc_cpe_doc_content: This is a simple document test
+        doc_cpe_doc_content_name: doc_content_name
+        doc_cpe_doc_title: test_title
+        doc_cpe_folder_name: /TESTFOLDER
+        doc_cpe_obj_store_name: OS01
+      vc_cpe_folder:
+      - folder_cpe_folder_path: /TESTFOLDER
+        folder_cpe_obj_store_name: OS01
+      vc_cpe_workflow:
+      - workflow_cpe_connection_point: pe_conn_os1
+        workflow_cpe_enabled: false
+    vc_icn_verification:
+    - vc_icn_desktop_id: P8DOMAIN
+      vc_icn_repository: P8DOMAIN
+status:
+  components:
+    Postgres_EDB:
+      EDB_Deployment: Upgrading
+      EDB_Service: Upgrading
+      EDB_Storage: Ready
+      lastTransitionTime: "2026-03-01T10:18:27Z"
+      message: ""
+      reason: ""
+    adsCredentialsService:
+      adsCredentialsServiceDeployment: NotInstalled
+      adsCredentialsServiceService: NotInstalled
+      conditions: []
+    adsGitService:
+      adsGitServiceDeployment: NotInstalled
+      adsGitServiceService: NotInstalled
+      conditions: []
+    adsLtpaCreation:
+      adsLtpaCreationJob: Ready
+      conditions: []
+    adsMongo:
+      adsMongoDeployment: NotInstalled
+      adsMongoService: NotInstalled
+      adsMongoStorage: NotInstalled
+      conditions: []
+    adsParsingService:
+      adsParsingServiceDeployment: NotInstalled
+      adsParsingServiceService: NotInstalled
+      conditions: []
+    adsRestApi:
+      adsRestApiDeployment: NotInstalled
+      adsRestApiService: NotInstalled
+      adsRestApiZenIntegration: NotInstalled
+      conditions: []
+    adsRrRegistration:
+      adsRrRegistrationJob: NotInstalled
+      conditions: []
+    adsRunService:
+      adsRunServiceDeployment: NotInstalled
+      adsRunServiceService: NotInstalled
+      conditions: []
+    adsRuntimeService:
+      adsRuntimeServiceDeployment: Ready
+      adsRuntimeServiceService: Ready
+      adsRuntimeServiceZenIntegration: Ready
+      conditions: []
+    ae-icp4adeploy-pbk:
+      adminSecret: ""
+      reconcile: Finished
+      service: Uninstalled
+    ae-icp4adeploy-workspace-aae:
+      adminSecret: icp4adeploy-workspace-aae-app-engine-admin-secret
+      reconcile: Finished
+      service: Ready
+    app-engine:
+      instance_count: "1"
+    bai:
+      bai_deploy_status: Ready
+      conditions:
+        lastTransitionTime: "2026-08-18T10:27:24Z"
+        message: Check detail status from InsightsEngine icp4adeploy CR if you need
+          it.
+        reason: InsightsEngine is Ready
+        status: true
+        type: Ready
+      insightsEngine: Ready
+    baml:
+      bamlCustomResource: Ready
+    bastudio:
+      adminSecret: icp4adeploy-bas-admin-secret
+      capabilities: []
+      reconcile: Finished
+      service: Ready
+    baw:
+    - bawCustomResource: Ready
+      name: icp4adeploy-bawins1
+    ca:
+      caDatabaseVerification: NotInstalled
+      caDeployment: NotInstalled
+      caRRRegistration: NotInstalled
+      caSecrets: NotInstalled
+      caService: NotInstalled
+      caStorageVerification: NotInstalled
+      caZenRegistration: NotInstalled
+      conditions:
+        lastTransitionTime: "2026-08-18T10:27:24Z"
+        message: CA's Zen integration was removed
+        reason: caZenRegistration
+        status: "True"
+        type: NotInstalled
+    cmis:
+      cmisDeployment: Ready
+      cmisRoute: Ready
+      cmisService: Ready
+      cmisStorage: Ready
+      cmisZenIntegration: Ready
+      lastTransitionTime: "2026-08-18T10:10:48Z"
+      message: ""
+      reason: ""
+    content_verification:
+      cmisVerification: Ready
+      conditions:
+        lastTransitionTime: "2026-04-21T13:29:42Z"
+        message: Verification Done
+        reason: Successful
+        status: "True"
+        type: Ready
+      cpeVerification: Ready
+      cssIndexVerification: NotInstalled
+    contentDesignerRepoAPI:
+      cdraDeployment: NotInstalled
+      cdraPersistentVolume: NotInstalled
+      cdraService: NotInstalled
+      cdraZenIntegration: NotInstalled
+      lastTransitionTime: "2026-08-18T10:10:48Z"
+      message: ""
+      reason: ""
+    contentDesignerService:
+      cdsDeployment: NotInstalled
+      cdsPersistentVolume: NotInstalled
+      cdsService: NotInstalled
+      cdsZenIntegration: NotInstalled
+      lastTransitionTime: "2026-08-18T10:10:48Z"
+      message: ""
+      reason: ""
+    contentProjectDeploymentService:
+      cpdsDeployment: NotInstalled
+      cpdsPersistentVolume: NotInstalled
+      cpdsService: NotInstalled
+      cpdsZenIntegration: NotInstalled
+      lastTransitionTime: "2026-08-18T10:10:48Z"
+      message: ""
+      reason: ""
+    cpe:
+      cpeDeployment: Ready
+      cpeJDBCDriver: Ready
+      cpeRoute: Ready
+      cpeService: Ready
+      cpeStorage: Ready
+      cpeZenIntegration: Ready
+      lastTransitionTime: "2026-08-18T10:26:12Z"
+      message: ""
+      reason: ""
+    cpe_audit:
+      cpeAuditDeployment: NotInstalled
+      cpeAuditStorage: NotInstalled
+      lastTransitionTime: "2026-08-18T10:10:48Z"
+      message: ""
+      reason: ""
+    extshare:
+      extshareDeployment: NotInstalled
+      extshareRoute: NotInstalled
+      extshareService: NotInstalled
+      extshareStorage: NotInstalled
+      lastTransitionTime: "2026-08-18T10:10:48Z"
+      message: ""
+      reason: ""
+    gitgatewayService:
+      gitsvcDeployment: NotInstalled
+      gitsvcPersistentVolume: NotInstalled
+      gitsvcService: NotInstalled
+      lastTransitionTime: "2026-08-18T10:10:48Z"
+      message: ""
+      reason: ""
+    graphql:
+      graphqlDeployment: Ready
+      graphqlRoute: Ready
+      graphqlService: Ready
+      graphqlStorage: Ready
+      lastTransitionTime: "2026-03-01T13:35:33Z"
+      message: ""
+      reason: ""
+    iccsap:
+      iccsapDeployment: NotInstalled
+      iccsapRoute: NotInstalled
+      iccsapService: NotInstalled
+      iccsapStorageCheck: NotInstalled
+    ier:
+      ierDeployment: NotInstalled
+      ierRoute: NotInstalled
+      ierService: NotInstalled
+      ierStorageCheck: NotInstalled
+    lsreporter:
+      lastTransitionTime: "2026-08-18T10:26:12Z"
+      lsreportercontentDeployment: NotInstalled
+      lsreportercontentService: NotInstalled
+      lsreportercontentStorage: NotInstalled
+      message: ""
+      reason: ""
+    navigator:
+      lastTransitionTime: "2026-08-18T10:10:48Z"
+      message: ""
+      navigatorDeployment: Ready
+      navigatorService: Ready
+      navigatorStorage: Ready
+      navigatorZenIntegration: Ready
+      reason: ""
+    odm:
+      odmDecisionCenterDeployment: NotInstalled
+      odmDecisionCenterService: NotInstalled
+      odmDecisionCenterZenIntegration: NotInstalled
+      odmDecisionRunnerDeployment: NotInstalled
+      odmDecisionRunnerService: NotInstalled
+      odmDecisionRunnerZenIntegration: NotInstalled
+      odmDecisionServerConsoleDeployment: NotInstalled
+      odmDecisionServerConsoleService: NotInstalled
+      odmDecisionServerConsoleZenIntegration: NotInstalled
+      odmDecisionServerRuntimeDeployment: NotInstalled
+      odmDecisionServerRuntimeService: NotInstalled
+      odmDecisionServerRuntimeZenIntegration: NotInstalled
+    prereq:
+      conditions: []
+      encryptionKeySecret: ibm-iaws-shared-key-secret
+      iafStatus: Ready
+      iamIntegrationStatus: NotReady
+      rootCASecretName: icp4a-root-ca
+      rootCAStatus: Ready
+    resource-registry:
+      rrAdminSecret: icp4adeploy-rr-admin-secret
+      rrCluster: Ready
+      rrService: Ready
+    tm:
+      lastTransitionTime: "2026-08-18T10:10:48Z"
+      message: ""
+      reason: ""
+      tmDeployment: NotInstalled
+      tmRoute: NotInstalled
+      tmService: NotInstalled
+      tmStorage: NotInstalled
+    viewone:
+      viewoneDeployment: NotInstalled
+      viewoneRRIntegration: NotInstalled
+      viewoneRoute: NotInstalled
+      viewoneService: NotInstalled
+      viewoneStorage: NotInstalled
+  conditions:
+  - message: ""
+    reason: Successful
+    status: "True"
+    type: Ready
+  - message: Running reconciliation
+    reason: Running
+    status: "True"
+    type: Running
+  endpoints:
+  - name: Resource Registry
+    scope: Internal
+    type: gRPC
+    uri: icp4adeploy-dba-rr-client.bawuat.svc:2379
+  - name: CPE Login URL
+    scope: External
+    type: UI
+    uri: https://cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/cpe/acce/
+  - name: CMIS Login URL for CP4BA
+    scope: External
+    type: UI
+    uri: https://cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/cmis/openfncmis_wlp
+  - name: CMIS Login URL for FNCM
+    scope: External
+    type: UI
+    uri: https://cmis-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/openfncmis_wlp
+  - name: GraphQL Login URL
+    scope: External
+    type: UI
+    uri: https://cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/content-services-graphql
+  - name: Navigator Login URL for CP4BA
+    scope: External
+    type: UI
+    uri: https://cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/icn/navigator/
+  - name: Navigator Login URL for FNCM
+    scope: External
+    type: UI
+    uri: https://navigator-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/navigator/
+  - name: BAStudio
+    scope: External
+    type: UI
+    uri: https://cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com
+  - name: Application Engine - icp4adeploy-workspace-aae
+    scope: External
+    type: UI
+    uri: https://cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/ae-workspace/
+  - name: BAW Login URL for bawins1
+    scope: External
+    type: UI
+    uri: https://cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/baw-bawins1/ProcessPortal
+  - name: BAW External base URL for bawins1
+    scope: External
+    type: UI
+    uri: https://cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/baw-bawins1/
+  - caSecret:
+      key: ca.crt
+      secretName: iaf-system-automationui-aui-zen-cert
+    name: adsRuntimeSwaggerUI
+    scope: External
+    type: UI
+    uri: https://cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/ads/runtime/api/swagger-ui
+  - caSecret:
+      key: ca.crt
+      secretName: iaf-system-automationui-aui-zen-cert
+    name: adsASRARuntimeSwaggerUI
+    scope: External
+    type: UI
+    uri: https://cpd-bawuat.apps.cp4bauatsaibocp.saibnet2.saib.com/ads/asra/api/swagger-ui
+  observedGeneration: "77"
