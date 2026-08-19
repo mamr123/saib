@@ -1,8 +1,6 @@
-# Check the secret's current certificate (the renewed one)
-oc get secret iaf-system-automationui-aui-zen-cert \
-  -o jsonpath='{.data.tls\.crt}' | base64 -d | openssl x509 -noout -dates -subject
+mkdir -p ~/cp4ba-mustgather-bawdev
+cd ~/cp4ba-mustgather-bawdev
 
-# Check what the Route is currently serving to browsers
-openssl s_client -connect cpd-bawdev.apps.cp4badevsaibocp.saibnet2.saib.com:443 \
-  -servername cpd-bawdev.apps.cp4badevsaibocp.saibnet2.saib.com </dev/null | \
-  openssl x509 -noout -dates -subject
+oc adm must-gather \
+  --image=icr.io/cpopen/cpfs/must-gather:latest \
+  -- gather -m automationfoundation -n bawdev
