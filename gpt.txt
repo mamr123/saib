@@ -1,5 +1,8 @@
-oc patch ZenService iaf-zen-cpdservice --type='json' \
-  -p='[{"op": "add", "path": "/spec/zenCustomRoute","value":{"route_secret":"dummy-value","route_reencrypt":true}}]' 
+# Check the secret's current certificate (the renewed one)
+oc get secret iaf-system-automationui-aui-zen-cert \
+  -o jsonpath='{.data.tls\.crt}' | base64 -d | openssl x509 -noout -dates -subject
 
-oc patch ZenService iaf-zen-cpdservice --type='json' \
-  -p='[{"op": "add", "path": "/spec/zenCustomRoute","value":{"route_secret":"iaf-system-automationui-aui-zen-cert","route_reencrypt":true}}]'
+# Check what the Route is currently serving to browsers
+openssl s_client -connect cpd-bawdev.apps.cp4badevsaibocp.saibnet2.saib.com:443 \
+  -servername cpd-bawdev.apps.cp4badevsaibocp.saibnet2.saib.com </dev/null | \
+  openssl x509 -noout -dates -subject
