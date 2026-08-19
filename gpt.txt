@@ -1,9 +1,5 @@
-     environment_config:
-        content_security_policy_additional_connect_src:
-          - 'https://*.saib.com.sa'
-        content_security_policy_additional_font_src:
-          - 'https://*.saib.com.sa'
-        content_security_policy_additional_frame_ancestor:
-          - 'https://crmcauat365.saib.com.sa'
-        content_security_policy_additional_script_src:
-          - 'https://*.saib.com.sa'
+oc patch ZenService iaf-zen-cpdservice --type='json' \
+  -p='[{"op": "add", "path": "/spec/zenCustomRoute","value":{"route_secret":"dummy-value","route_reencrypt":true}}]' 
+
+oc patch ZenService iaf-zen-cpdservice --type='json' \
+  -p='[{"op": "add", "path": "/spec/zenCustomRoute","value":{"route_secret":"iaf-system-automationui-aui-zen-cert","route_reencrypt":true}}]'
