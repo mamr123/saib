@@ -1,1 +1,30 @@
-oc get certificate -A -o custom-columns=NAMESPACE:.metadata.namespace,NAME:.metadata.name,RenewBEFORE:.status.notBefore,NotAFTER:.status.notAfter,RenewalTime:.status.renewalTime
+[g552bipe-byt@sitlxdvcpap218 ~]$ oc get certificate -A -o custom-columns=NAMESPACE:.metadata.namespace,NAME:.metadata.name,RenewBEFORE:.status.notBefore,NotAFTER:.status.notAfter,RenewalTime:.status.renewalTime
+NAMESPACE   NAME                                           RenewBEFORE            NotAFTER               RenewalTime
+bawdev      common-service-db-im-tls-cert                  2026-07-30T09:13:02Z   2026-10-28T09:13:02Z   2026-09-28T09:13:02Z
+bawdev      common-service-db-replica-tls-cert             2026-07-30T09:13:27Z   2026-10-28T09:13:27Z   2026-09-28T09:13:27Z
+bawdev      common-service-db-tls-cert                     2026-07-30T09:12:35Z   2027-07-30T09:12:35Z   2027-06-30T09:12:35Z
+bawdev      common-service-db-zen-tls-cert                 2026-07-30T09:13:33Z   2026-10-28T09:13:33Z   2026-09-28T09:13:33Z
+bawdev      common-web-ui-ca-cert                          2026-07-30T09:12:33Z   2027-09-01T09:12:33Z   2027-05-04T09:12:33Z
+bawdev      cs-ca-certificate                              2026-07-30T09:12:05Z   2028-07-29T09:12:05Z   2027-11-29T01:12:05Z
+bawdev      foundation-iaf-automationbase-ab-ss-ca         2026-06-23T13:15:24Z   2026-09-21T13:15:24Z   2026-08-22T13:15:24Z
+bawdev      iaf-system-automationui-aui-zen-ca             2026-06-23T12:29:51Z   2026-09-21T12:29:51Z   2026-08-22T12:29:51Z
+bawdev      iaf-system-automationui-aui-zen-cert           2026-06-23T12:30:01Z   2026-09-21T12:30:01Z   2026-08-22T12:30:01Z
+bawdev      ibm-bts-ca-cert-v1                             2026-06-29T11:00:54Z   2026-09-27T11:00:54Z   2026-08-28T11:00:54Z
+bawdev      ibm-bts-cert-v1                                2026-06-29T11:00:58Z   2026-09-27T11:00:58Z   2026-08-28T11:00:58Z
+bawdev      ibm-zen-metastore-edb-certificate              2026-07-30T09:13:07Z   2026-10-28T09:13:07Z   2026-09-28T09:13:07Z
+bawdev      icp4adeploy-insights-engine-cockpit-cert       2026-06-29T11:27:26Z   2026-09-27T11:27:26Z   2026-08-28T11:27:26Z
+bawdev      icp4adeploy-insights-engine-flink-cert         2026-06-29T11:26:22Z   2026-09-27T11:26:22Z   2026-08-28T11:26:22Z
+bawdev      icp4adeploy-insights-engine-management-cert    2026-06-29T11:27:17Z   2026-09-27T11:27:17Z   2026-08-28T11:27:17Z
+bawdev      identity-provider-cert                         2026-07-30T09:13:24Z   2027-09-01T09:13:24Z   2027-05-04T09:13:24Z
+bawdev      internal-tls-certificate                       2026-07-30T09:13:24Z   2026-10-28T09:13:24Z   2026-09-28T09:13:24Z
+bawdev      internal-tls-pkcs12-certificate                2026-07-30T09:13:11Z   2026-10-28T09:13:11Z   2026-09-28T09:13:11Z
+bawdev      internal-tls-pkcs8-certificate                 2026-07-30T09:13:22Z   2026-10-28T09:13:22Z   2026-09-28T09:13:22Z
+bawdev      opencontent-flink-operator-ca                  2026-06-29T11:19:39Z   2026-09-27T11:19:39Z   2026-08-28T11:19:39Z
+bawdev      opensearch                                     2026-07-30T08:57:42Z   2026-10-28T08:57:42Z   2026-09-28T08:57:42Z
+bawdev      opensearch-tls-secret-route                    2026-07-30T08:57:32Z   2026-10-28T08:57:32Z   2026-09-28T08:57:32Z
+bawdev      platform-auth-cert                             2026-07-30T09:12:34Z   2027-09-01T09:12:34Z   2027-05-04T09:12:34Z
+bawdev      platform-identity-management                   2026-07-30T09:13:24Z   2027-09-01T09:13:24Z   2027-05-04T09:13:24Z
+bawdev      saml-auth-cert                                 2026-07-30T09:12:57Z   2027-09-01T09:12:57Z   2027-05-04T09:12:57Z
+bawdev      zen-metastore-edb-replica-client-certificate   2026-07-30T09:13:36Z   2026-10-28T09:13:36Z   2026-09-28T09:13:36Z
+bawdev      zen-metastore-edb-server-certificate           2026-07-30T09:13:43Z   2027-07-30T09:13:43Z   2027-06-30T09:13:43Z
+bawdev      zen-minio-certificate                          2026-07-30T09:13:42Z   2027-08-29T19:13:42Z   2027-07-30T09:13:42Z
