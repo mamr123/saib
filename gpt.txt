@@ -1,17 +1,1 @@
-echo | openssl s_client -connect cpd-bawuat.apps.ocpautotst.domain.edbe.local:443 \
-  -servername cpd-bawuat.apps.ocpautotst.domain.edbe.local -showcerts 2>/dev/null \
-  | openssl x509 -noout -subject -issuer -serial -dates
-
-
-# Is a custom default certificate configured at all?
-oc get ingresscontroller default -n openshift-ingress-operator \
-  -o jsonpath='{.spec.defaultCertificate}'
-
-# If empty/absent → the router is presenting its auto-generated self-signed cert.
-# Inspect what it actually serves:
-oc get secret router-certs-default -n openshift-ingress \
-  -o jsonpath='{.data.tls\.crt}' | base64 -d \
-  | openssl x509 -noout -subject -issuer -serial -dates
-
-# Also check whether this specific route overrides with its own cert:
-oc get route cpd-bawuat  -o jsonpath='{.spec.tls}'
+oc get certificate -A -o custom-columns=NAMESPACE:.metadata.namespace,NAME:.metadata.name,RenewBEFORE:.status.notBefore,NotAFTER:.status.notAfter,RenewalTime:.status.renewalTime
